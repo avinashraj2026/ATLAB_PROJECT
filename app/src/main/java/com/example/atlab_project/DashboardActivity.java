@@ -4,7 +4,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.Toast;
 
+import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+
+import java.net.URL;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -40,6 +45,21 @@ public class DashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(DashboardActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
+        });
+        Button videoConsultBtn = findViewById(R.id.btn_video_consult);
+        videoConsultBtn.setOnClickListener(v -> {
+            try {
+                JitsiMeetConferenceOptions options
+                        = new JitsiMeetConferenceOptions.Builder()
+                        .setServerURL(new URL("https://meet.jit.si"))
+                        .setRoom("DoctorConsultRoom123") // You can generate a unique room if needed
+                        .setAudioMuted(false)
+                        .build();
+                JitsiMeetActivity.launch(this, options);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Error starting video call", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

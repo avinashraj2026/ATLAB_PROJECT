@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.atlab_project"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -40,4 +40,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("org.jitsi.react:jitsi-meet-sdk:7.0.1")
 }
