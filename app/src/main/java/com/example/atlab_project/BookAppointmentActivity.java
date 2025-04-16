@@ -41,7 +41,7 @@ public class BookAppointmentActivity extends AppCompatActivity {
         btnBook = findViewById(R.id.btn_book);
         textSelectedDate = findViewById(R.id.text_selected_date);
 
-        loadDoctors();
+        loadDoctors(); // Load doctor names from DB
 
         btnPickDate.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
@@ -72,7 +72,6 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
             int doctorId = doctorMap.get(selectedDoctor);
 
-            // Fetch userId from SharedPreferences (you should save it during login)
             SharedPreferences prefs = getSharedPreferences("user", MODE_PRIVATE);
             int userId = prefs.getInt("userId", -1);
 
@@ -85,11 +84,22 @@ public class BookAppointmentActivity extends AppCompatActivity {
 
             if (success) {
                 Toast.makeText(this, "Appointment booked!", Toast.LENGTH_SHORT).show();
-                // Optional: clear date selection or finish()
+                finish();
             } else {
                 Toast.makeText(this, "Booking failed", Toast.LENGTH_SHORT).show();
             }
         });
+
+        // Optional: Handle pre-selected doctor
+        String doctorToPreselect = getIntent().getStringExtra("doctor_name");
+        if (doctorToPreselect != null && !doctorToPreselect.isEmpty()) {
+            for (int i = 0; i < doctorNames.size(); i++) {
+                if (doctorNames.get(i).contains(doctorToPreselect)) {
+                    spinnerDoctors.setSelection(i);
+                    break;
+                }
+            }
+        }
     }
 
     private void loadDoctors() {

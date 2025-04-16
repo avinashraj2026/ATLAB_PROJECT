@@ -61,5 +61,12 @@ public class DashboardActivity extends AppCompatActivity {
                 Toast.makeText(this, "Error starting video call", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Button paymentBtn = findViewById(R.id.btn_payment);
+        paymentBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, PaymentActivity.class);
+            startActivity(intent);
+        });
+
     }
 }

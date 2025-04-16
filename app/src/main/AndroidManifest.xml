@@ -35,6 +35,8 @@
         <activity android:name=".BookAppointmentActivity" />
         <activity android:name=".ViewDoctorsActivity" />
         <activity android:name=".MyAppointmentsActivity" />
+        <activity android:name=".PaymentActivity"/>
+        <activity android:name=".FeedbackActivity" />
 
 
 

@@ -11,7 +11,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database Name and Version
     public static final String DATABASE_NAME = "Healthcare.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)");
         db.execSQL("CREATE TABLE doctors (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, specialization TEXT)");
         db.execSQL("CREATE TABLE appointments (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, doctorId INTEGER, date TEXT)");
-
+        db.execSQL("CREATE TABLE feedback (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, rating REAL, comment TEXT)");
         db.execSQL("INSERT INTO doctors (name, specialization) VALUES ('Dr. Asha Mehta', 'Cardiologist')");
         db.execSQL("INSERT INTO doctors (name, specialization) VALUES ('Dr. Rahul Verma', 'Dermatologist')");
         db.execSQL("INSERT INTO doctors (name, specialization) VALUES ('Dr. Neha Sharma', 'Pediatrician')");
@@ -98,6 +98,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "WHERE a.userId = ?", new String[]{String.valueOf(userId)}
         );
     }
+
+    public int getAppointmentCount(int userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM appointments WHERE userId = ?", new String[]{String.valueOf(userId)});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    public void clearAppointmentsForUser(int userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("appointments", "userId = ?", new String[]{String.valueOf(userId)});
+    }
+
+    public boolean insertFeedback(int userId, float rating, String comment) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("userId", userId);
+        values.put("rating", rating);
+        values.put("comment", comment);
+        long result = db.insert("feedback", null, values);
+        return result != -1;
+    }
+
 }
 
 
